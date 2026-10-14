@@ -85,11 +85,13 @@ export const App: React.FC = () => {
     setSelectedFlaw(flaw);
   };
 
-  const handleAddCustomPair = (newPair: ContrastiveSpeechPair) => {
+  const handleAddCustomPair = (newPair: ContrastiveSpeechPair, autoSwitch = true) => {
     setDataset(prev => [newPair, ...prev]);
     setSelectedPairId(newPair.id);
     setSelectedFlaw(newPair.flaws[0] || null);
-    setActiveTab('dashboard');
+    if (autoSwitch) {
+      setActiveTab('dashboard');
+    }
   };
 
   return (
@@ -166,6 +168,7 @@ export const App: React.FC = () => {
           <LiveStudio
             currentIdealPair={selectedPair}
             onEvaluationComplete={handleAddCustomPair}
+            onNavigateToDashboard={() => setActiveTab('dashboard')}
           />
         )}
 
