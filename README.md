@@ -39,15 +39,19 @@ flowchart TD
     subgraph GroundingEngine["2. Temporal Flaw Grounding & Telemetry"]
         D2 --> G1["Acoustic Telemetry Analyzer"]
         G1 --> G2{"5 Flaw Classifiers"}
-        G2 -->|Density > 15/100w| F1["FILLER_CLUSTER"]
-        G2 -->|WPM > 185 or < 95| F2["PACING_VIOLATION"]
-        G2 -->|Pitch SD < 8 Hz| F3["PROSODIC_MONOTONY"]
-        G2 -->|Silence > 1.8s| F4["HESITATION_DEAD_AIR"]
-        G2 -->|Hedge Markers / Uptalk| F5["RHETORICAL_WEAKNESS"]
+        G2 -->|"Filler Density > 15"| F1["FILLER_CLUSTER"]
+        G2 -->|"Rate > 185 or < 95 WPM"| F2["PACING_VIOLATION"]
+        G2 -->|"Pitch SD < 8 Hz"| F3["PROSODIC_MONOTONY"]
+        G2 -->|"Silence > 1.8s"| F4["HESITATION_DEAD_AIR"]
+        G2 -->|"Hedges / Uptalk"| F5["RHETORICAL_WEAKNESS"]
     end
 
     subgraph RubricEngine["3. Deterministic Rubric Engine"]
-        F1 & F2 & F3 & F4 & F5 --> R1["Deterministic Scoring Math (Seed #2026)"]
+        F1 --> R1["Deterministic Scoring Math (Seed #2026)"]
+        F2 --> R1
+        F3 --> R1
+        F4 --> R1
+        F5 --> R1
         R1 --> R2["Dynamic Time Warping (DTW) Contour Alignment"]
         R2 --> R3["5-Axis Weighted Aggregation (Auto-Normalizing)"]
         R3 --> R4["SHA-256 Verification Hash (0.000 Variance, ICC = 1.0)"]
